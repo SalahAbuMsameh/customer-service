@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                bat label: '', script: 'mvn -X clean compile'
+                bat label: '', script: 'mvn clean compile'
             }
             post {
                 success {
