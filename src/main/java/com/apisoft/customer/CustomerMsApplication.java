@@ -1,20 +1,22 @@
-package com.soft.ms.customer;
+package com.apisoft.customer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * 
+ * Customer ms application.
+ *
  * @author Salah Abu Msameh
  */
 @SpringBootApplication
-public class CustomerServiceApplication {
-
+public class CustomerMsApplication {
+	
 	/**
-	 * 
-	 * @param args
+	 * app main method.
+	 *
+	 * @param args app run arguments
 	 */
 	public static void main(String[] args) {
-		SpringApplication.run(CustomerServiceApplication.class, args);
+		SpringApplication.run(CustomerMsApplication.class, args);
 	}
 }

@@ -1,4 +1,4 @@
-package com.soft.ms.customer;
+package com.apisoft.customer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
