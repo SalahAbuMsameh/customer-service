@@ -70,11 +70,14 @@ public class CustomerMsRestController {
      * @return
      */
     @GetMapping("/{customerId}")
-    public ResponseEntity<ApiResponse<Customer>> getCustomer(@PathVariable("customerId") Long customerId)
+    public ResponseEntity<ApiResponse<CustomerResponse>> getCustomer(@PathVariable("customerId") Long customerId)
             throws CustomerMsException {
 
         try {
-            return ApiResponseBuilder.ok(this.customerMsSrv.getCustomer(customerId));
+            return ApiResponseBuilder.ok(new CustomerResponse(this.customerMsSrv.getCustomer(customerId)));
+        } catch (BadRequestException ex) {
+            LOGGER.error(ex.getMessage());
+            throw ex;
         } catch (Exception ex) {
             LOGGER.error("", ex);
             throw new CustomerMsException(ex);
@@ -88,7 +91,8 @@ public class CustomerMsRestController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<ApiResponse<CustomerResponse>> addCustomer(@Valid @RequestBody Customer customer) throws CustomerMsException {
+    public ResponseEntity<ApiResponse<CustomerResponse>> addCustomer(@Valid @RequestBody Customer customer)
+            throws CustomerMsException {
 
         try {
             customer = this.customerMsSrv.addCustomer(customer);
@@ -100,6 +104,7 @@ public class CustomerMsRestController {
                     .toUri();
 
             return ApiResponseBuilder.created(location, new CustomerResponse(customer));
+            
         } catch (Exception ex) {
             LOGGER.error("", ex);
             throw new CustomerMsException(ex);
@@ -121,7 +126,11 @@ public class CustomerMsRestController {
                     .filter(c -> c.getCustomerId() > 0)
                     .orElseThrow(() -> new BadRequestException(Errors.REQUEST_FIELDS_VALIDATION_ERRORS, null));
 
-            return ApiResponseBuilder.ok(new CustomerResponse(customer));
+            return ApiResponseBuilder.ok(new CustomerResponse(customerMsSrv.updateCustomer(customer)));
+            
+        } catch (BadRequestException ex) {
+            LOGGER.error(ex.getMessage());
+            throw ex;
         } catch (Exception ex) {
             LOGGER.error("", ex);
             throw new CustomerMsException(ex);
@@ -140,6 +149,9 @@ public class CustomerMsRestController {
 
         try {
             return ApiResponseBuilder.ok(new CustomerResponse(this.customerMsSrv.getCustomer(customerId)));
+        } catch (BadRequestException ex) {
+            LOGGER.error(ex.getMessage());
+            throw ex;
         } catch (Exception ex) {
             LOGGER.error("", ex);
             throw new CustomerMsException(ex);

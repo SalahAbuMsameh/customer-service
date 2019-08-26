@@ -1,5 +1,6 @@
 package com.apisoft.customer.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -100,6 +101,7 @@ public class Customer {
     }
 
     @JsonProperty("created_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     @Column(name = "CREATED_DATE")
     public Date getCreatedDate() {
