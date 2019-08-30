@@ -15,7 +15,7 @@ public class BadRequestException extends CustomerMsException {
      * constructor.
      * @param error error enum param (code & default message)
      */
-    public BadRequestException(Errors error) {
+    public BadRequestException(final Errors error) {
         this(error, null, null);
     }
 
@@ -25,7 +25,7 @@ public class BadRequestException extends CustomerMsException {
      * @param error error enum param (code & default message)
      * @param arguments values to be replaced on the default message placeholder if any
      */
-    public BadRequestException(Errors error, Object... arguments) {
+    public BadRequestException(final Errors error, final Object... arguments) {
         this(error, null, arguments);
     }
 
@@ -36,7 +36,7 @@ public class BadRequestException extends CustomerMsException {
      * @param errorDetails detailed error message
      * @param arguments alues to be replaced on the default message placeholder if any
      */
-    public BadRequestException(Errors error, String errorDetails, Object... arguments) {
+    public BadRequestException(final Errors error, final String errorDetails, final Object... arguments) {
         super(null);
         this.error = error;
         this.errorDetails = errorDetails;

@@ -47,8 +47,8 @@ import java.util.stream.Collectors;
 public class CustomerMsResponseExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@Override
-	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(final HttpRequestMethodNotSupportedException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		
 		StringBuilder sb = new StringBuilder();
 		
@@ -60,62 +60,62 @@ public class CustomerMsResponseExceptionHandler extends ResponseEntityExceptionH
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(final HttpMediaTypeNotSupportedException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(final HttpMediaTypeNotAcceptableException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleMissingPathVariable(MissingPathVariableException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleMissingPathVariable(final MissingPathVariableException ex,
+				final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleMissingServletRequestParameter(final MissingServletRequestParameterException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleServletRequestBindingException(ServletRequestBindingException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleServletRequestBindingException(final ServletRequestBindingException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleConversionNotSupported(ConversionNotSupportedException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleConversionNotSupported(final ConversionNotSupportedException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleTypeMismatch(final TypeMismatchException ex, final HttpHeaders headers,
+			final HttpStatus status, final WebRequest request) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(final HttpMessageNotReadableException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotWritable(HttpMessageNotWritableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleHttpMessageNotWritable(final HttpMessageNotWritableException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 
 	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 
 		return ApiResponseBuilder.badRequest(ex.getBindingResult().getAllErrors()
 				.stream()
@@ -124,20 +124,20 @@ public class CustomerMsResponseExceptionHandler extends ResponseEntityExceptionH
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleMissingServletRequestPart(MissingServletRequestPartException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleMissingServletRequestPart(final MissingServletRequestPartException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
-			WebRequest request) {
+	protected ResponseEntity<Object> handleBindException(final BindException ex, final HttpHeaders headers,
+				final HttpStatus status, final WebRequest request) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleNoHandlerFoundException(final NoHandlerFoundException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
 		
 		return ApiResponseBuilder.genericError(status, new StringBuilder("No handler found for ")
 				.append(ex.getHttpMethod())
@@ -147,8 +147,8 @@ public class CustomerMsResponseExceptionHandler extends ResponseEntityExceptionH
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleAsyncRequestTimeoutException(AsyncRequestTimeoutException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest webRequest) {
+	protected ResponseEntity<Object> handleAsyncRequestTimeoutException(final AsyncRequestTimeoutException ex,
+			final HttpHeaders headers, final HttpStatus status, final WebRequest webRequest) {
 		return ApiResponseBuilder.genericError(status, ex.getMessage());
 	}
 
@@ -159,7 +159,7 @@ public class CustomerMsResponseExceptionHandler extends ResponseEntityExceptionH
 	 * @return
 	 */
 	@ExceptionHandler(BadRequestException.class)
-	public ResponseEntity<ApiResponse<Void>> handleBadRequestException(BadRequestException ex) {
+	public ResponseEntity<ApiResponse<Void>> handleBadRequestException(final BadRequestException ex) {
 		return ApiResponseBuilder.badRequest(ex.getError(), ex.getErrorDetails(), ex.getArguments());
 	}
 	
@@ -170,7 +170,7 @@ public class CustomerMsResponseExceptionHandler extends ResponseEntityExceptionH
 	 * @return
 	 */
 	@ExceptionHandler(CustomerMsException.class)
-	public ResponseEntity<ApiResponse<Void>> handleCustomerMsException(CustomerMsException ex) {
+	public ResponseEntity<ApiResponse<Void>> handleCustomerMsException(final CustomerMsException ex) {
 		return ApiResponseBuilder.internalServerError();
 	}
 	
@@ -181,7 +181,7 @@ public class CustomerMsResponseExceptionHandler extends ResponseEntityExceptionH
 	 * @return
 	 */
 	@ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handle(Exception ex) {
+    public ResponseEntity<ApiResponse<Void>> handle(final Exception ex) {
 		return ApiResponseBuilder.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, Errors.INTERNAL_SERVER_ERROR);
 	}
 }

@@ -16,7 +16,7 @@ public class CustomerMsApplication {
 	 *
 	 * @param args app run arguments
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		SpringApplication.run(CustomerMsApplication.class, args);
 	}
 }

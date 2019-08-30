@@ -34,7 +34,7 @@ public class ApiResponseBuilder {
      * @param responseBody actual response body which contains the requested data from the current api call
      * @return
      */
-    public static <R> ResponseEntity<ApiResponse<R>> ok(R responseBody) {
+    public static <R> ResponseEntity<ApiResponse<R>> ok(final R responseBody) {
         return ResponseEntity.ok(successResponse(responseBody));
     }
     
@@ -45,7 +45,7 @@ public class ApiResponseBuilder {
      * @return created model
      * @throws URISyntaxException if failed to create a location URI
      */
-    public static <R> ResponseEntity<ApiResponse<R>> created(String entityPath) throws URISyntaxException {
+    public static <R> ResponseEntity<ApiResponse<R>> created(final String entityPath) throws URISyntaxException {
         return ResponseEntity
                 .created(new URI(entityPath))
                 .build();
@@ -58,7 +58,7 @@ public class ApiResponseBuilder {
      * @return created model
      * @throws URISyntaxException if failed to create a location URI
      */
-    public static <R> ResponseEntity<ApiResponse<R>> created(R responseBody) throws URISyntaxException {
+    public static <R> ResponseEntity<ApiResponse<R>> created(final R responseBody) throws URISyntaxException {
         return ResponseEntity
                 .created(new URI(""))
                 .body(successResponse(responseBody));
@@ -72,7 +72,8 @@ public class ApiResponseBuilder {
      * @return created model
      * @throws URISyntaxException if failed to create a location URI
      */
-    public static <R> ResponseEntity<ApiResponse<R>> created(URI location, R responseBody) throws URISyntaxException {
+    public static <R> ResponseEntity<ApiResponse<R>> created(final URI location, final R responseBody)
+            throws URISyntaxException {
         
         if(location != null) {
             return ResponseEntity
@@ -101,7 +102,8 @@ public class ApiResponseBuilder {
      * @param arguments list of values to be replaced in the error(s) placeholders if any
      * @return
      */
-    public static <R> ResponseEntity<ApiResponse<R>> badRequest(Errors error, String errorDetails, Object[] arguments) {
+    public static <R> ResponseEntity<ApiResponse<R>> badRequest(final Errors error, final String errorDetails,
+                                                                final Object[] arguments) {
         return errorResponse(HttpStatus.BAD_REQUEST, error, errorDetails, arguments);
     }
 
@@ -111,7 +113,7 @@ public class ApiResponseBuilder {
      * @param validationErrors list of the request fields validation error messages
      * @return
      */
-    public static ResponseEntity<Object> badRequest(List<String> validationErrors) {
+    public static ResponseEntity<Object> badRequest(final List<String> validationErrors) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(errorResponse(Errors.REQUEST_FIELDS_VALIDATION_ERRORS.errorCode,
@@ -126,7 +128,7 @@ public class ApiResponseBuilder {
      * @param message error details
      * @return
      */
-    public static ResponseEntity<Object> genericError(HttpStatus status, String message) {
+    public static ResponseEntity<Object> genericError(final HttpStatus status, final String message) {
         return ResponseEntity
                 .status(status)
                 .body(errorResponse(Errors.GENERIC_ERROR.errorCode,
@@ -149,7 +151,7 @@ public class ApiResponseBuilder {
      * @param responseBody actual response body which contains the requested data from the current api call
      * @return
      */
-    private static <R> ApiResponse<R> successResponse(R responseBody) {
+    private static <R> ApiResponse<R> successResponse(final R responseBody) {
         return response(ResponseStatus.SUCCESS.status, responseBody, null, null, null,
                 null, null);
     }
@@ -161,7 +163,7 @@ public class ApiResponseBuilder {
      * @param error common error
      * @return
      */
-    public static <R> ResponseEntity<ApiResponse<R>> errorResponse(HttpStatus status, Errors error) {
+    public static <R> ResponseEntity<ApiResponse<R>> errorResponse(final HttpStatus status, final Errors error) {
         return ResponseEntity
                 .status(status)
                 .body(errorResponse(error, null));
@@ -175,10 +177,10 @@ public class ApiResponseBuilder {
      * @param arguments list of values to be replaced in the error(s) placeholders if any
      * @return
      */
-    public static <R> ResponseEntity<ApiResponse<R>> errorResponse(HttpStatus status,
-                                                                   Errors error,
-                                                                   String errorDetails,
-                                                                   Object[] arguments) {
+    public static <R> ResponseEntity<ApiResponse<R>> errorResponse(final HttpStatus status,
+                                                                   final Errors error,
+                                                                   final String errorDetails,
+                                                                   final Object[] arguments) {
         return ResponseEntity
                 .status(status)
                 .body(errorResponse(error.errorCode, error.errorMessage, errorDetails, arguments, null));
@@ -191,7 +193,7 @@ public class ApiResponseBuilder {
      * @param arguments list of values to be replaced in the error(s) placeholders if any
      * @return
      */
-    private static <R> ApiResponse<R> errorResponse(Errors error, Object[] arguments) {
+    private static <R> ApiResponse<R> errorResponse(final Errors error, final Object[] arguments) {
         return errorResponse(error.errorCode, error.errorMessage, null, arguments, null);
     }
 
@@ -205,11 +207,11 @@ public class ApiResponseBuilder {
 	 * @param validationErrors list of request fields validation errors
      * @return
      */
-    private static <R> ApiResponse<R> errorResponse(String errorCode,
-                                                    String errorMsg,
-                                                    String errorDetails,
-                                                    Object[] arguments,
-                                                    List<String> validationErrors) {
+    private static <R> ApiResponse<R> errorResponse(final String errorCode,
+                                                    final String errorMsg,
+                                                    final String errorDetails,
+                                                    final Object[] arguments,
+                                                    final List<String> validationErrors) {
         return response(ResponseStatus.FAILED.status,null, errorCode, errorMsg, arguments, errorDetails,
                 validationErrors);
     }
@@ -226,13 +228,13 @@ public class ApiResponseBuilder {
 	 * @param validationErrors list of request fields validation errors
      * @return
      */
-    private static <R> ApiResponse<R> response(String status,
-                                               R responseBody,
-                                               String errorCode,
-                                               String errorMsg,
-                                               Object[] arguments,
-                                               String errorDetails,
-                                               List<String> validationErrors) {
+    private static <R> ApiResponse<R> response(final String status,
+                                               final R responseBody,
+                                               final String errorCode,
+                                               final String errorMsg,
+                                               final Object[] arguments,
+                                               final String errorDetails,
+                                               final List<String> validationErrors) {
 
         ApiResponse<R> response = new ApiResponse<R>();
 

@@ -3,7 +3,8 @@ package com.apisoft.customer;
 import static org.mockito.BDDMockito.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,6 +35,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,15 +74,15 @@ public class CustomerMsAppTests {
 	 * @throws Exception
 	 */
 	@Test
-	public void testGetAllCustomers_successResponse() throws Exception {
+	public void testGetAllCustomers_SuccessResponse() throws Exception {
 		
 		mvc.perform(get("/customers")
 				.contentType(MediaType.APPLICATION_JSON))
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.status)))
-			.andExpect(jsonPath("$.response_body", is(notNullValue())))
-			.andExpect(jsonPath("$.response_body.customers.length()", is(1)));
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.status)))
+				.andExpect(jsonPath("$.response_body", is(notNullValue())))
+				.andExpect(jsonPath("$.response_body.customers.length()", is(1)));
 	}
 	
 	/**
@@ -95,12 +97,12 @@ public class CustomerMsAppTests {
 		
 		MvcResult mvcResult = mvc.perform(get("/customers/1")
 				.contentType(MediaType.APPLICATION_JSON))
-			.andDo(print())
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.status)))
-			.andExpect(jsonPath("$.response_body", is(notNullValue())))
-			.andExpect(jsonPath("$.response_body.customer").exists())
-			.andReturn();
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.status)))
+				.andExpect(jsonPath("$.response_body", is(notNullValue())))
+				.andExpect(jsonPath("$.response_body.customer").exists())
+				.andReturn();
 		
 		String customerResponse = JsonUtils.extractJson(mvcResult.getResponse().getContentAsString(),
 				"$.response_body.customer");
@@ -120,10 +122,10 @@ public class CustomerMsAppTests {
 		
 		mvc.perform(get("/customers/2")
 				.contentType(MediaType.APPLICATION_JSON))
-			.andDo(print())
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
-			.andExpect(jsonPath("$.response_body").doesNotExist());
+				.andDo(print())
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
+				.andExpect(jsonPath("$.response_body").doesNotExist());
 	}
 	
 	/**
@@ -137,12 +139,151 @@ public class CustomerMsAppTests {
 		
 		mvc.perform(get("/customers/55")
 				.contentType(MediaType.APPLICATION_JSON))
-			.andDo(print())
-			.andExpect(status().isInternalServerError())
-			.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
-			.andExpect(jsonPath("$.error_code", is(Errors.INTERNAL_SERVER_ERROR.errorCode)))
-			.andExpect(jsonPath("$.response_body").doesNotExist());
+				.andDo(print())
+				.andExpect(status().isInternalServerError())
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
+				.andExpect(jsonPath("$.error_code", is(Errors.INTERNAL_SERVER_ERROR.errorCode)))
+				.andExpect(jsonPath("$.response_body").doesNotExist());
 	}
+	
+	/**
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testAddCustomer_SuccessResponse() throws Exception {
+		
+		Customer customerTwo = objMapper.readValue(
+				getFileContent("customer-two.json"), new TypeReference<Customer>(){});
+		
+		MvcResult mvcResult = mvc.perform(post("/customers")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objMapper.writeValueAsBytes(customerTwo)))
+				.andDo(print())
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.status)))
+				.andExpect(jsonPath("$.response_body", is(notNullValue())))
+				.andExpect(jsonPath("$.response_body.customer").exists())
+				.andReturn();
+		
+		String customerResponse = JsonUtils.extractJson(mvcResult.getResponse().getContentAsString(),
+				"$.response_body.customer");
+		
+		customerTwo.setCreatedDate(new Date());
+		String customerStr = objMapper.writeValueAsString(customerTwo);
+		
+		JSONAssert.assertEquals(customerStr, customerResponse, JSONCompareMode.STRICT);
+	}
+	
+	/**
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testAddCustomer_BadRequestResponse() throws Exception {
+		
+		mvc.perform(post("/customers")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objMapper.writeValueAsBytes(new Customer())))
+				.andDo(print())
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
+				.andExpect(jsonPath("$.response_body").doesNotExist())
+				.andExpect(jsonPath("$.request_validation_errors").exists())
+				.andExpect(jsonPath("$.error_code", is(Errors.REQUEST_FIELDS_VALIDATION_ERRORS.errorCode)));
+	}
+	
+	/**
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testAddCustomer_InternalServerError() throws Exception {
+		
+		Customer customer = objMapper.readValue(
+				getFileContent("customer-two.json"), new TypeReference<Customer>(){});
+		customer.setCustomerId(Long.valueOf("222"));
+		
+		given(dao.save(customer))
+				.willThrow(new RuntimeException("Error while saving entity to the database"));
+		
+		mvc.perform(post("/customers")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objMapper.writeValueAsBytes(customer)))
+				.andDo(print())
+				.andExpect(status().isInternalServerError())
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
+				.andExpect(jsonPath("$.response_body").doesNotExist())
+				.andExpect(jsonPath("$.error_code", is(Errors.INTERNAL_SERVER_ERROR.errorCode)));
+	}
+    
+    /**
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testUpdateCustomer_SuccessResponse() throws Exception {
+        
+        Customer customerThree = objMapper.readValue(
+                getFileContent("customer-three.json"), new TypeReference<Customer>(){});
+        
+        MvcResult mvcResult = mvc.perform(put("/customers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objMapper.writeValueAsBytes(customerThree)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.status)))
+                .andExpect(jsonPath("$.response_body", is(notNullValue())))
+                .andExpect(jsonPath("$.response_body.customer").exists())
+                .andReturn();
+        
+        String customerResponse = JsonUtils.extractJson(mvcResult.getResponse().getContentAsString(),
+                "$.response_body.customer");
+        String customerStr = objMapper.writeValueAsString(customerThree);
+        
+        JSONAssert.assertEquals(customerStr, customerResponse, JSONCompareMode.STRICT);
+    }
+    
+    /**
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testUpdateCustomer_BadRequestResponse() throws Exception {
+        
+        mvc.perform(post("/customers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objMapper.writeValueAsBytes(new Customer())))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
+                .andExpect(jsonPath("$.response_body").doesNotExist())
+                .andExpect(jsonPath("$.request_validation_errors").exists())
+                .andExpect(jsonPath("$.error_code", is(Errors.REQUEST_FIELDS_VALIDATION_ERRORS.errorCode)));
+    }
+    
+    /**
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testUpdateCustomer_InternalServerError() throws Exception {
+        
+        Customer customer = objMapper.readValue(
+                getFileContent("customer-two.json"), new TypeReference<Customer>(){});
+        
+        given(dao.save(customer))
+                .willThrow(new RuntimeException("Error while saving entity to the database"));
+        
+        mvc.perform(post("/customers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objMapper.writeValueAsBytes(customer)))
+                .andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
+                .andExpect(jsonPath("$.response_body").doesNotExist())
+                .andExpect(jsonPath("$.error_code", is(Errors.INTERNAL_SERVER_ERROR.errorCode)));
+    }
 	
 	/**
 	 * Read file content.

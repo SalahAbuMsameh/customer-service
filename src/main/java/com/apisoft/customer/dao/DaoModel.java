@@ -29,20 +29,23 @@ public interface DaoModel<T> {
      * Save given entity.
      *
      * @param entity to be persisted to the database
+     * @return persisted entity
      */
-    public void save(T entity);
+    public T save(T entity);
 
     /**
      * Updates the given entity.
      *
      * @param entity entity to be updated to the database
+     * @return updated entity
      */
-    public void update(T entity);
+    public T update(T entity);
 
     /**
      * Deletes the given entity.
      *
      * @param entity to be deleted from the database
+     * @return deleted entity
      */
-    public void delete(T entity);
+    public T delete(T entity);
 }

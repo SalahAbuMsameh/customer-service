@@ -16,7 +16,7 @@ public enum ResponseStatus {
      * constructor.
      * @param status status value
      */
-    ResponseStatus(String status) {
+    ResponseStatus(final String status) {
         this.status = status;
     }
 }

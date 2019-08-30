@@ -21,7 +21,7 @@ public enum Errors {
      * @param code error code
      * @param errorMessage error default message
      */
-    Errors(String code, String errorMessage) {
+    Errors(final String code, final String errorMessage) {
         this.errorCode = code;
         this.errorMessage = errorMessage;
     }

@@ -18,7 +18,7 @@ public final class JsonUtils {
      * @param root root element to be extracted from the json string
      * @return
      */
-    public static String extractJson(String json, String root) {
+    public static String extractJson(final String json, final String root) {
         
         JsonProvider jsonProvider = new JsonSmartJsonProvider();
         return jsonProvider.toJson(JsonPath.read(json, root));

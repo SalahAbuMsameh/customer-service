@@ -21,12 +21,12 @@ public class CustomerDao implements DaoModel<Customer> {
      * constructor.
      * @param entityManager configured entity manager
      */
-    public CustomerDao(EntityManager entityManager) {
+    public CustomerDao(final EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
     @Override
-    public Optional<Customer> findById(Long id) {
+    public Optional<Customer> findById(final Long id) {
         return Optional.ofNullable(this.entityManager.find(Customer.class, id));
     }
 
@@ -38,17 +38,20 @@ public class CustomerDao implements DaoModel<Customer> {
     }
 
     @Override
-    public void save(Customer entity) {
+    public Customer save(final Customer entity) {
         this.entityManager.persist(entity);
+        return entity;
     }
 
     @Override
-    public void update(Customer entity) {
+    public Customer update(final Customer entity) {
         this.entityManager.merge(entity);
+        return entity;
     }
 
     @Override
-    public void delete(Customer entity) {
+    public Customer delete(final Customer entity) {
         this.entityManager.remove(entity);
+        return entity;
     }
 }

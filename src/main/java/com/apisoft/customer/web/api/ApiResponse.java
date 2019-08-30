@@ -32,7 +32,7 @@ public class ApiResponse<R> {
 	}
 	
 	@JsonProperty("response_status")
-	public void setResponseStatus(String responseStatus) {
+	public void setResponseStatus(final String responseStatus) {
 		this.responseStatus = responseStatus;
 	}
 	
@@ -42,7 +42,7 @@ public class ApiResponse<R> {
 		return date;
 	}
 	
-	public void setDate(LocalDateTime date) {
+	public void setDate(final LocalDateTime date) {
 		this.date = date;
 	}
 
@@ -51,7 +51,7 @@ public class ApiResponse<R> {
 		return requestNo;
 	}
 
-	public void setRequestNo(String requestNo) {
+	public void setRequestNo(final String requestNo) {
 		this.requestNo = requestNo;
 	}
 
@@ -60,7 +60,7 @@ public class ApiResponse<R> {
 		return errorCode;
 	}
 	
-	public void setErrorCode(String errorCode) {
+	public void setErrorCode(final String errorCode) {
 		this.errorCode = errorCode;
 	}
 	
@@ -69,7 +69,7 @@ public class ApiResponse<R> {
 		return errorMessage;
 	}
 	
-	public void setErrorMessage(String errorMessage) {
+	public void setErrorMessage(final String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
 	
@@ -78,15 +78,16 @@ public class ApiResponse<R> {
 		return errorDetails;
 	}
 	
-	public void setErrorDetails(String errorDetails) {
+	public void setErrorDetails(final String errorDetails) {
 		this.errorDetails = errorDetails;
 	}
 
+	@JsonProperty("request_validation_errors")
 	public List<String> getFieldValidationErrors() {
 		return fieldValidationErrors;
 	}
 
-	public void setFieldValidationErrors(List<String> fieldValidationErrors) {
+	public void setFieldValidationErrors(final List<String> fieldValidationErrors) {
 		this.fieldValidationErrors = fieldValidationErrors;
 	}
 
@@ -95,7 +96,7 @@ public class ApiResponse<R> {
 		return responseBody;
 	}
 	
-	public void setResponseBody(R responseBody) {
+	public void setResponseBody(final R responseBody) {
 		this.responseBody = responseBody;
 	}
 }

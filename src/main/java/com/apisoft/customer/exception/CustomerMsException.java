@@ -15,7 +15,7 @@ public class CustomerMsException extends Exception {
      *
      * @param t throwable caused the exception
      */
-    public CustomerMsException(Throwable t) {
+    public CustomerMsException(final Throwable t) {
        super(t);
        this.error = Errors.INTERNAL_SERVER_ERROR;
     }

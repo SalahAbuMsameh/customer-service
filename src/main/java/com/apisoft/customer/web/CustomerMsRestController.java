@@ -43,7 +43,7 @@ public class CustomerMsRestController {
      * constructor.
      * @param customerMsSrv customer service object
      */
-    public CustomerMsRestController(CustomerMsService customerMsSrv) {
+    public CustomerMsRestController(final CustomerMsService customerMsSrv) {
         this.customerMsSrv = customerMsSrv;
     }
 
@@ -70,7 +70,7 @@ public class CustomerMsRestController {
      * @return
      */
     @GetMapping("/{customerId}")
-    public ResponseEntity<ApiResponse<CustomerResponse>> getCustomer(@PathVariable("customerId") Long customerId)
+    public ResponseEntity<ApiResponse<CustomerResponse>> getCustomer(@PathVariable("customerId") final Long customerId)
             throws CustomerMsException {
 
         try {
@@ -91,19 +91,19 @@ public class CustomerMsRestController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<ApiResponse<CustomerResponse>> addCustomer(@Valid @RequestBody Customer customer)
+    public ResponseEntity<ApiResponse<CustomerResponse>> addCustomer(@Valid @RequestBody final Customer customer)
             throws CustomerMsException {
 
         try {
-            customer = this.customerMsSrv.addCustomer(customer);
+            Customer persistedCustomer = this.customerMsSrv.addCustomer(customer);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{customerId}")//current method resource path
-                    .buildAndExpand(customer.getCustomerId())
+                    .buildAndExpand(persistedCustomer.getCustomerId())
                     .toUri();
 
-            return ApiResponseBuilder.created(location, new CustomerResponse(customer));
+            return ApiResponseBuilder.created(location, new CustomerResponse(persistedCustomer));
             
         } catch (Exception ex) {
             LOGGER.error("", ex);
@@ -118,7 +118,7 @@ public class CustomerMsRestController {
      * @return
      */
     @PutMapping
-    public ResponseEntity<ApiResponse<CustomerResponse>> updateCustomer(@RequestBody Customer customer)
+    public ResponseEntity<ApiResponse<CustomerResponse>> updateCustomer(@RequestBody final Customer customer)
             throws CustomerMsException {
 
         try {
@@ -144,11 +144,11 @@ public class CustomerMsRestController {
      * @return
      */
     @DeleteMapping("/{customerId}")
-    public ResponseEntity<ApiResponse<CustomerResponse>> deleteCustomer(@PathVariable("customerId") Long customerId)
+    public ResponseEntity<ApiResponse<CustomerResponse>> deleteCustomer(@PathVariable("customerId") final Long customerId)
             throws CustomerMsException {
 
         try {
-            return ApiResponseBuilder.ok(new CustomerResponse(this.customerMsSrv.getCustomer(customerId)));
+            return ApiResponseBuilder.ok(new CustomerResponse(this.customerMsSrv.deleteCustomer(customerId)));
         } catch (BadRequestException ex) {
             LOGGER.error(ex.getMessage());
             throw ex;

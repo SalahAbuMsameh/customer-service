@@ -44,7 +44,7 @@ public class Customer {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(final Long customerId) {
         this.customerId = customerId;
     }
 
@@ -54,7 +54,7 @@ public class Customer {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -65,7 +65,7 @@ public class Customer {
         return mobileNo;
     }
 
-    public void setMobileNo(String mobileNo) {
+    public void setMobileNo(final String mobileNo) {
         this.mobileNo = mobileNo;
     }
 
@@ -75,7 +75,7 @@ public class Customer {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -86,7 +86,7 @@ public class Customer {
         return addressLine1;
     }
 
-    public void setAddressLine1(String addressLine1) {
+    public void setAddressLine1(final String addressLine1) {
         this.addressLine1 = addressLine1;
     }
 
@@ -96,7 +96,7 @@ public class Customer {
         return addressLine2;
     }
 
-    public void setAddressLine2(String addressLine2) {
+    public void setAddressLine2(final String addressLine2) {
         this.addressLine2 = addressLine2;
     }
 
@@ -108,7 +108,28 @@ public class Customer {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(final Date createdDate) {
         this.createdDate = createdDate;
+    }
+    
+    @Override
+    public int hashCode() {
+        return this.customerId.hashCode();
+    }
+    
+    @Override
+    public boolean equals(final Object obj) {
+        
+        if(this.customerId == null || !(obj instanceof Customer)) {
+           return false;
+        }
+        
+        Customer otherCustomer = (Customer) obj;
+        
+        if(this.customerId.equals(otherCustomer.getCustomerId())) {
+            return true;
+        }
+        
+        return false;
     }
 }

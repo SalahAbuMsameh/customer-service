@@ -28,7 +28,7 @@ public class CustomerMsService {
      * constructor.
      * @param customerDao customer dao component
      */
-    public CustomerMsService(CustomerDao customerDao) {
+    public CustomerMsService(final CustomerDao customerDao) {
         this.customerDao = customerDao;
     }
 
@@ -48,9 +48,9 @@ public class CustomerMsService {
      * @return customer info
      * @throws BadRequestException when no customer found for the given id
      */
-    public Customer getCustomer(Long customerId) throws BadRequestException {
-
-        return loadCustomer(customerId)
+    public Customer getCustomer(final Long customerId) throws BadRequestException {
+        
+        return this.customerDao.findById(customerId)
                 .orElseThrow(() -> new BadRequestException(Errors.NO_CUSTOMER_FOUND, customerId));
     }
 
@@ -60,26 +60,22 @@ public class CustomerMsService {
      * @param customer customer info object
      * @return added customer
      */
-    public Customer addCustomer(Customer customer) {
+    public Customer addCustomer(final Customer customer) {
         
         customer.setCreatedDate(new Date());
-        this.customerDao.save(customer);
-
-        return customer;
+        return this.customerDao.save(customer);
     }
     
     /**
      * updates customer info.
      *
      * @param customer new customer info object
-     * @return
+     * @return updated customer
+     * @throws BadRequestException when no customer found for the given id
      */
-    public Customer updateCustomer(Customer customer) throws  CustomerMsException {
+    public Customer updateCustomer(final Customer customer) throws  BadRequestException {
         
-        Long customerId = customer.getCustomerId();
-        
-        Customer originalCustomer = loadCustomer(customerId)
-                .orElseThrow(() -> new BadRequestException(Errors.NO_CUSTOMER_FOUND, customerId));
+        Customer originalCustomer = getCustomer(customer.getCustomerId());
         
         originalCustomer.setName(!StringUtils.isEmpty(customer.getName()) ? customer.getName() : originalCustomer.getName());
         originalCustomer.setAddressLine1(!StringUtils.isEmpty(customer.getAddressLine1()) ? customer.getAddressLine1() :
@@ -98,12 +94,16 @@ public class CustomerMsService {
     }
     
     /**
-     * load customer from the database.
+     * Delete customer.
      *
      * @param customerId customer id which will be used to fetch the customer.
-     * @return
+     * @return deleted customer
+     * @throws BadRequestException when no customer found for the given id
      */
-    private Optional<Customer> loadCustomer(Long customerId) {
-        return this.customerDao.findById(customerId);
+    public Customer deleteCustomer(final Long customerId) throws BadRequestException {
+    
+        Customer customer = getCustomer(customerId);
+        customerDao.delete(customer);
+        return customer;
     }
 }

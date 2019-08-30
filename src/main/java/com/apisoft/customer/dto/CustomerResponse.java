@@ -24,7 +24,7 @@ public class CustomerResponse {
      * constructor.
      * @param customer customer which will represents the response body
      */
-    public CustomerResponse(Customer customer) {
+    public CustomerResponse(final Customer customer) {
         this.customer = customer;
     }
 
@@ -32,7 +32,7 @@ public class CustomerResponse {
      * constructor.
      * @param customers customers list which will represents the response body
      */
-    public CustomerResponse(List<Customer> customers) {
+    public CustomerResponse(final List<Customer> customers) {
         this.customers = customers;
     }
 
@@ -41,7 +41,7 @@ public class CustomerResponse {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(final Customer customer) {
         this.customer = customer;
     }
 
@@ -50,7 +50,7 @@ public class CustomerResponse {
         return customers;
     }
 
-    public void setCustomers(List<Customer> customers) {
+    public void setCustomers(final List<Customer> customers) {
         this.customers = customers;
     }
 }
