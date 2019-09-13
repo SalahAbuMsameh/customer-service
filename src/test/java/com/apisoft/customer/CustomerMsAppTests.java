@@ -16,6 +16,7 @@ import com.apisoft.customer.service.CustomerMsService;
 import com.apisoft.customer.util.JsonUtils;
 import com.apisoft.customer.web.CustomerMsRestController;
 import com.apisoft.customer.web.api.ResponseStatus;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +36,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +58,8 @@ public class CustomerMsAppTests {
 	@MockBean
 	private CustomerDao dao;
 	
-	private ObjectMapper objMapper = new ObjectMapper();
+	ObjectMapper objMapper = new ObjectMapper()
+			.registerModule(new JavaTimeModule());
 	private List<Customer> customers;
 	
 	@Before
@@ -80,7 +83,7 @@ public class CustomerMsAppTests {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.status)))
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.getStatus())))
 				.andExpect(jsonPath("$.response_body", is(notNullValue())))
 				.andExpect(jsonPath("$.response_body.customers.length()", is(1)));
 	}
@@ -99,7 +102,7 @@ public class CustomerMsAppTests {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.status)))
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.getStatus())))
 				.andExpect(jsonPath("$.response_body", is(notNullValue())))
 				.andExpect(jsonPath("$.response_body.customer").exists())
 				.andReturn();
@@ -124,7 +127,7 @@ public class CustomerMsAppTests {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.getStatus())))
 				.andExpect(jsonPath("$.response_body").doesNotExist());
 	}
 	
@@ -141,8 +144,8 @@ public class CustomerMsAppTests {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isInternalServerError())
-				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
-				.andExpect(jsonPath("$.error_code", is(Errors.INTERNAL_SERVER_ERROR.errorCode)))
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.getStatus())))
+				.andExpect(jsonPath("$.error_code", is(Errors.INTERNAL_SERVER_ERROR.getErrorCode())))
 				.andExpect(jsonPath("$.response_body").doesNotExist());
 	}
 	
@@ -153,15 +156,15 @@ public class CustomerMsAppTests {
 	@Test
 	public void testAddCustomer_SuccessResponse() throws Exception {
 		
-		Customer customerTwo = objMapper.readValue(
-				getFileContent("customer-two.json"), new TypeReference<Customer>(){});
+		Customer customerTwo = objMapper.readValue(getFileContent("customer-two.json"), new TypeReference<Customer>(){});
+		given(dao.save(customerTwo)).willReturn(customerTwo);
 		
 		MvcResult mvcResult = mvc.perform(post("/customers")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objMapper.writeValueAsBytes(customerTwo)))
 				.andDo(print())
 				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.status)))
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.getStatus())))
 				.andExpect(jsonPath("$.response_body", is(notNullValue())))
 				.andExpect(jsonPath("$.response_body.customer").exists())
 				.andReturn();
@@ -169,7 +172,7 @@ public class CustomerMsAppTests {
 		String customerResponse = JsonUtils.extractJson(mvcResult.getResponse().getContentAsString(),
 				"$.response_body.customer");
 		
-		customerTwo.setCreatedDate(new Date());
+		//customerTwo.setCreatedDate(LocalDate.of(2019, 8, 28));
 		String customerStr = objMapper.writeValueAsString(customerTwo);
 		
 		JSONAssert.assertEquals(customerStr, customerResponse, JSONCompareMode.STRICT);
@@ -187,10 +190,10 @@ public class CustomerMsAppTests {
 				.content(objMapper.writeValueAsBytes(new Customer())))
 				.andDo(print())
 				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.getStatus())))
 				.andExpect(jsonPath("$.response_body").doesNotExist())
 				.andExpect(jsonPath("$.request_validation_errors").exists())
-				.andExpect(jsonPath("$.error_code", is(Errors.REQUEST_FIELDS_VALIDATION_ERRORS.errorCode)));
+				.andExpect(jsonPath("$.error_code", is(Errors.REQUEST_FIELDS_VALIDATION_ERRORS.getErrorCode())));
 	}
 	
 	/**
@@ -212,9 +215,9 @@ public class CustomerMsAppTests {
 				.content(objMapper.writeValueAsBytes(customer)))
 				.andDo(print())
 				.andExpect(status().isInternalServerError())
-				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
+				.andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.getStatus())))
 				.andExpect(jsonPath("$.response_body").doesNotExist())
-				.andExpect(jsonPath("$.error_code", is(Errors.INTERNAL_SERVER_ERROR.errorCode)));
+				.andExpect(jsonPath("$.error_code", is(Errors.INTERNAL_SERVER_ERROR.getErrorCode())));
 	}
     
     /**
@@ -224,21 +227,21 @@ public class CustomerMsAppTests {
     @Test
     public void testUpdateCustomer_SuccessResponse() throws Exception {
         
-        Customer customerThree = objMapper.readValue(
-                getFileContent("customer-three.json"), new TypeReference<Customer>(){});
+        Customer customerThree = objMapper.readValue(getFileContent("customer-three.json"), new TypeReference<Customer>(){});
+        given(dao.findById(customerThree.getCustomerId()))
+				.willReturn(Optional.of(customerThree));
         
         MvcResult mvcResult = mvc.perform(put("/customers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objMapper.writeValueAsBytes(customerThree)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.status)))
+                .andExpect(jsonPath("$.response_status", is(ResponseStatus.SUCCESS.getStatus())))
                 .andExpect(jsonPath("$.response_body", is(notNullValue())))
                 .andExpect(jsonPath("$.response_body.customer").exists())
                 .andReturn();
         
-        String customerResponse = JsonUtils.extractJson(mvcResult.getResponse().getContentAsString(),
-                "$.response_body.customer");
+        String customerResponse = JsonUtils.extractJson(mvcResult.getResponse().getContentAsString(), "$.response_body.customer");
         String customerStr = objMapper.writeValueAsString(customerThree);
         
         JSONAssert.assertEquals(customerStr, customerResponse, JSONCompareMode.STRICT);
@@ -256,10 +259,10 @@ public class CustomerMsAppTests {
                 .content(objMapper.writeValueAsBytes(new Customer())))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
+                .andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.getStatus())))
                 .andExpect(jsonPath("$.response_body").doesNotExist())
                 .andExpect(jsonPath("$.request_validation_errors").exists())
-                .andExpect(jsonPath("$.error_code", is(Errors.REQUEST_FIELDS_VALIDATION_ERRORS.errorCode)));
+                .andExpect(jsonPath("$.error_code", is(Errors.REQUEST_FIELDS_VALIDATION_ERRORS.getErrorCode())));
     }
     
     /**
@@ -280,9 +283,9 @@ public class CustomerMsAppTests {
                 .content(objMapper.writeValueAsBytes(customer)))
                 .andDo(print())
                 .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.status)))
+                .andExpect(jsonPath("$.response_status", is(ResponseStatus.FAILED.getStatus())))
                 .andExpect(jsonPath("$.response_body").doesNotExist())
-                .andExpect(jsonPath("$.error_code", is(Errors.INTERNAL_SERVER_ERROR.errorCode)));
+                .andExpect(jsonPath("$.error_code", is(Errors.INTERNAL_SERVER_ERROR.getErrorCode())));
     }
 	
 	/**

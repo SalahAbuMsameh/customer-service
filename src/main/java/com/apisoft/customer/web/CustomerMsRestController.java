@@ -124,7 +124,7 @@ public class CustomerMsRestController {
         try {
             Optional.of(customer)
                     .filter(c -> c.getCustomerId() > 0)
-                    .orElseThrow(() -> new BadRequestException(Errors.REQUEST_FIELDS_VALIDATION_ERRORS, null));
+                    .orElseThrow(() -> new BadRequestException(Errors.REQUEST_FIELDS_VALIDATION_ERRORS, (Object[]) null));
 
             return ApiResponseBuilder.ok(new CustomerResponse(customerMsSrv.updateCustomer(customer)));
             

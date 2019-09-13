@@ -23,6 +23,7 @@
 		<swagger2.version>2.9.2</swagger2.version>
 		<jacoco.plugin.version>0.8.4</jacoco.plugin.version>
 		<jsonpath.version>2.4.0</jsonpath.version>
+		<spotbugs.maven.version>3.1.12.2</spotbugs.maven.version>
 	</properties>
 
 	<dependencies>
@@ -52,6 +53,11 @@
 					<artifactId>mapstruct</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 
 		<dependency>
@@ -121,6 +127,11 @@
 					<!--suppress UnresolvedMavenProperty -->
 					<argLine>-Xmx1024m -XX:MaxPermSize=256m ${surefireArgLine}</argLine>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>${spotbugs.maven.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>

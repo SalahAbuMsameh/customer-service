@@ -12,8 +12,8 @@ public enum Errors {
     GENERIC_ERROR("ERR-003", "Generic error"),
     NO_CUSTOMER_FOUND("ERR-004", "No customer found for customer id [{0}]");
 
-    public String errorCode;
-    public String errorMessage;
+    private String errorCode;
+    private String errorMessage;
 
     /**
      * constructor.
@@ -24,5 +24,13 @@ public enum Errors {
     Errors(final String code, final String errorMessage) {
         this.errorCode = code;
         this.errorMessage = errorMessage;
+    }
+    
+    public String getErrorCode() {
+        return errorCode;
+    }
+    
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }

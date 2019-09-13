@@ -10,7 +10,7 @@ public enum ResponseStatus {
     SUCCESS("success"),
     FAILED("fail");
 
-    public String status;
+    private String status;
 
     /**
      * constructor.
@@ -18,5 +18,9 @@ public enum ResponseStatus {
      */
     ResponseStatus(final String status) {
         this.status = status;
+    }
+    
+    public String getStatus() {
+        return status;
     }
 }

@@ -3,7 +3,6 @@ package com.apisoft.customer.dao.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,10 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * The customer entity.
@@ -33,7 +30,7 @@ public class Customer {
     private String email;
     private String addressLine1;
     private String addressLine2;
-    private Date createdDate;
+    private LocalDate createdDate;
 
     @JsonProperty("customer_id")
     @Id
@@ -102,13 +99,12 @@ public class Customer {
 
     @JsonProperty("created_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
     @Column(name = "CREATED_DATE")
-    public Date getCreatedDate() {
-        return createdDate;
+    public LocalDate getCreatedDate() {
+        return this.createdDate;
     }
 
-    public void setCreatedDate(final Date createdDate) {
+    public void setCreatedDate(final LocalDate createdDate) {
         this.createdDate = createdDate;
     }
     

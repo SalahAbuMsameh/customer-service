@@ -116,8 +116,8 @@ public class ApiResponseBuilder {
     public static ResponseEntity<Object> badRequest(final List<String> validationErrors) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse(Errors.REQUEST_FIELDS_VALIDATION_ERRORS.errorCode,
-                        Errors.REQUEST_FIELDS_VALIDATION_ERRORS.errorMessage,
+                .body(errorResponse(Errors.REQUEST_FIELDS_VALIDATION_ERRORS.getErrorCode(),
+                        Errors.REQUEST_FIELDS_VALIDATION_ERRORS.getErrorMessage(),
                         null, null, validationErrors));
     }
     
@@ -131,8 +131,8 @@ public class ApiResponseBuilder {
     public static ResponseEntity<Object> genericError(final HttpStatus status, final String message) {
         return ResponseEntity
                 .status(status)
-                .body(errorResponse(Errors.GENERIC_ERROR.errorCode,
-                                    Errors.GENERIC_ERROR.errorMessage,
+                .body(errorResponse(Errors.GENERIC_ERROR.getErrorCode(),
+                                    Errors.GENERIC_ERROR.getErrorMessage(),
                                     message, null, null));
     }
 
@@ -152,7 +152,7 @@ public class ApiResponseBuilder {
      * @return
      */
     private static <R> ApiResponse<R> successResponse(final R responseBody) {
-        return response(ResponseStatus.SUCCESS.status, responseBody, null, null, null,
+        return response(ResponseStatus.SUCCESS.getStatus(), responseBody, null, null, null,
                 null, null);
     }
     
@@ -183,7 +183,8 @@ public class ApiResponseBuilder {
                                                                    final Object[] arguments) {
         return ResponseEntity
                 .status(status)
-                .body(errorResponse(error.errorCode, error.errorMessage, errorDetails, arguments, null));
+                .body(errorResponse(error.getErrorCode(), error.getErrorMessage(),
+                        errorDetails, arguments, null));
     }
     
     /**
@@ -194,7 +195,8 @@ public class ApiResponseBuilder {
      * @return
      */
     private static <R> ApiResponse<R> errorResponse(final Errors error, final Object[] arguments) {
-        return errorResponse(error.errorCode, error.errorMessage, null, arguments, null);
+        return errorResponse(error.getErrorCode(), error.getErrorMessage(),
+                null, arguments, null);
     }
 
     /**
@@ -212,7 +214,7 @@ public class ApiResponseBuilder {
                                                     final String errorDetails,
                                                     final Object[] arguments,
                                                     final List<String> validationErrors) {
-        return response(ResponseStatus.FAILED.status,null, errorCode, errorMsg, arguments, errorDetails,
+        return response(ResponseStatus.FAILED.getStatus(),null, errorCode, errorMsg, arguments, errorDetails,
                 validationErrors);
     }
 

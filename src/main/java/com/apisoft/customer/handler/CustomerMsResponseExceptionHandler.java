@@ -9,6 +9,7 @@ import com.apisoft.customer.web.api.ResponseStatus;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -34,6 +35,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -54,7 +56,11 @@ public class CustomerMsResponseExceptionHandler extends ResponseEntityExceptionH
 		
 	    sb.append(ex.getMethod());
 	    sb.append(" method is not supported for this request. Supported methods is/are ");
-	    ex.getSupportedHttpMethods().forEach(t -> sb.append(t + " "));
+	    
+	    Set<HttpMethod> supportedMethods = ex.getSupportedHttpMethods();
+	    if(supportedMethods != null) {
+			supportedMethods.forEach(t -> sb.append(t + " "));
+		}
 	    
 		return ApiResponseBuilder.genericError(status, sb.toString());
 	}

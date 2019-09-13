@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,7 @@ public class CustomerMsService {
      */
     public Customer addCustomer(final Customer customer) {
         
-        customer.setCreatedDate(new Date());
+        customer.setCreatedDate(LocalDate.now());
         return this.customerDao.save(customer);
     }
     
