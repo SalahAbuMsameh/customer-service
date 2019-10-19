@@ -1,7 +1,6 @@
 package com.apisoft.customer.service;
 
 import com.apisoft.customer.exception.BadRequestException;
-import com.apisoft.customer.exception.CustomerMsException;
 import com.apisoft.customer.dao.CustomerDao;
 import com.apisoft.customer.dao.entity.Customer;
 import com.apisoft.customer.exception.Errors;
@@ -10,9 +9,7 @@ import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Customer ms busing logic.

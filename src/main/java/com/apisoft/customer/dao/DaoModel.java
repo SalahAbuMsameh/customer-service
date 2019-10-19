@@ -8,7 +8,7 @@ import java.util.Optional;
  *
  * @author Salah Abu Msameh
  */
-public interface DaoModel<T> {
+interface DaoModel<T> {
 
     /**
      * find entity by the given id.
@@ -16,14 +16,14 @@ public interface DaoModel<T> {
      * @param id entity id
      * @return entity object associated with the given id
      */
-    public Optional<T> findById(Long id);
+    Optional<T> findById(Long id);
 
     /**
      * Finds all entities.
      *
      * @return list of all existing entities
      */
-    public List<T> findAll();
+    List<T> findAll();
 
     /**
      * Save given entity.
@@ -31,7 +31,7 @@ public interface DaoModel<T> {
      * @param entity to be persisted to the database
      * @return persisted entity
      */
-    public T save(T entity);
+    T save(T entity);
 
     /**
      * Updates the given entity.
@@ -39,7 +39,7 @@ public interface DaoModel<T> {
      * @param entity entity to be updated to the database
      * @return updated entity
      */
-    public T update(T entity);
+    T update(T entity);
 
     /**
      * Deletes the given entity.
@@ -47,5 +47,5 @@ public interface DaoModel<T> {
      * @param entity to be deleted from the database
      * @return deleted entity
      */
-    public T delete(T entity);
+    T delete(T entity);
 }

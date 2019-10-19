@@ -1,7 +1,5 @@
 package com.apisoft.customer.exception;
 
-import java.util.Arrays;
-
 /**
  * This exception represents a user bad request.<br/>
  * Throwing this exception will cause a 400 response to the client.
@@ -42,10 +40,11 @@ public class BadRequestException extends CustomerMsException {
         super(null);
         this.error = error;
         this.errorDetails = errorDetails;
+        this.arguments = arguments;
     }
     
     public Object[] getArguments() {
-        return (this.arguments != null ? Arrays.copyOf(this.arguments, this.arguments.length) : null);
+        return this.arguments;
     }
 
     public String getErrorDetails() {

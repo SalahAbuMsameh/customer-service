@@ -24,6 +24,8 @@
 		<jacoco.plugin.version>0.8.4</jacoco.plugin.version>
 		<jsonpath.version>2.4.0</jsonpath.version>
 		<spotbugs.maven.version>3.1.12.2</spotbugs.maven.version>
+        <maven-pmd-plugin>3.12.0</maven-pmd-plugin>
+		<pmdVersion>6.13.0</pmdVersion>
 	</properties>
 
 	<dependencies>
@@ -140,6 +142,37 @@
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-maven-plugin</artifactId>
 				<version>${spotbugs.maven.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>${maven-pmd-plugin}</version>
+				<configuration>
+					<linkXRef>false</linkXRef>
+					<sourceEncoding>utf-8</sourceEncoding>
+					<minimumTokens>100</minimumTokens>
+					<targetJdk>${java.version}</targetJdk>
+					<failOnViolation>true</failOnViolation>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>net.sourceforge.pmd</groupId>
+						<artifactId>pmd-core</artifactId>
+						<version>${pmdVersion}</version>
+					</dependency>
+					<dependency>
+						<groupId>net.sourceforge.pmd</groupId>
+						<artifactId>pmd-java</artifactId>
+						<version>${pmdVersion}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
