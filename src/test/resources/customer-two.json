@@ -1,0 +1,8 @@
+{
+  "customer_id": 222,
+  "name": "Customer Two",
+  "email": "customer.two@gmail.com",
+  "mobile_no": "11111111",
+  "address_line_1": "address line one",
+  "created_date": "2019-08-28"
+}
