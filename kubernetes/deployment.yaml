@@ -14,3 +14,19 @@ spec:
           image: customer-service:v1
           ports:
             - containerPort: 8080
+          env:
+            - name: customer.service.spring.datasource.url
+              valueFrom:
+                configMapKeyRef:
+                  name: customer-service-config-map
+                  key: customer.service.spring.datasource.url
+            - name: customer.service.spring.datasource.username
+              valueFrom:
+                configMapKeyRef:
+                  name: customer-service-config-map
+                  key: customer.service.spring.datasource.username
+            - name: customer.service.spring.datasource.password
+              valueFrom:
+                secretKeyRef:
+                  name: customer-service-secret
+                  key: customer.service.spring.datasource.password
