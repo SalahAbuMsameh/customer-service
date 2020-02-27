@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: customer-service-config-map
-  namespace: default
-data:
-  customer.service.spring.datasource.url: jdbc:postgresql://192.168.56.1:5432/customer_service?ssl=true&sslmode=require
-  customer.service.spring.datasource.username: postgres
