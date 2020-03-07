@@ -1,26 +1,30 @@
 package com.apisoft.customer.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.PostConstruct;
+import com.apisoft.customer.control.interceptor.HttpRequestCounterInterceptor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Customer microservice configurations.
  *
  * @author Salah Abu Msameh
  */
-public class CustomerMsConfigs {
-    
-    @Autowired
-    private ObjectMapper objectMapper;
-    
+@Configuration
+public class CustomerMsConfigs implements WebMvcConfigurer {
+
+    private HttpRequestCounterInterceptor httpRequestCounterInterceptor;
+
     /**
-     * register new java {@link java.time.LocalDate} & {@link java.time.LocalDateTime} serializers/deserializers.
+     *
+     * @param httpRequestCounterInterceptor
      */
-    @PostConstruct
-    public void setUp() {
-        objectMapper.registerModule(new JavaTimeModule());
+    public CustomerMsConfigs(final HttpRequestCounterInterceptor httpRequestCounterInterceptor) {
+        this.httpRequestCounterInterceptor = httpRequestCounterInterceptor;
+    }
+
+    @Override
+    public void addInterceptors(final InterceptorRegistry registry) {
+        registry.addInterceptor(httpRequestCounterInterceptor).addPathPatterns("/api/**");
     }
 }

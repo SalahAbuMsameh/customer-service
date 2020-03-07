@@ -2,12 +2,14 @@ package com.apisoft.customer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * Customer ms application.
  *
  * @author Salah Abu Msameh
  */
+@EnableAsync
 @SpringBootApplication
 public class CustomerMsApplication {
 	

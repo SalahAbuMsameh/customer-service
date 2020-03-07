@@ -3,6 +3,7 @@ package com.apisoft.customer.web;
 import com.apisoft.customer.dto.CustomerResponse;
 import com.apisoft.customer.exception.BadRequestException;
 import com.apisoft.customer.exception.Errors;
+import io.micrometer.core.annotation.Timed;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -32,7 +33,8 @@ import java.util.Optional;
  * @author Salah Abu Msameh
  */
 @RestController
-@RequestMapping(path = "/customers")
+@RequestMapping(path = "/api/customers")
+@Timed
 public class CustomerMsRestController {
 
     private static final Log LOGGER = LogFactory.getLog(CustomerMsRestController.class);

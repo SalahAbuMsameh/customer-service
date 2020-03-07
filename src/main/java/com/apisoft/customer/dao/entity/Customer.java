@@ -36,7 +36,7 @@ public class Customer {
     @Id
     @Column(name = "CUSTOMER_ID")
     @GeneratedValue(generator = "customerIdGen", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "customerIdGen", sequenceName = "CUSTOMER_ID_SEQ")
+    @SequenceGenerator(name = "customerIdGen", sequenceName = "CUSTOMER_ID_SEQ", allocationSize = 1)
     public Long getCustomerId() {
         return customerId;
     }
