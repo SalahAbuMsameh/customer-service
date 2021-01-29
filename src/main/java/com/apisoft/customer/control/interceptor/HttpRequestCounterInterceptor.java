@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * class docs.
+ * Http requests/response interceptor.
+ * This interceptor is responsible for maintaining all the custom counters for monitoring purposes.
  *
  * @author Salah Abu Msameh
  * @since 2/28/2020
