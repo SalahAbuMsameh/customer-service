@@ -33,7 +33,7 @@ import java.util.Optional;
  * @author Salah Abu Msameh
  */
 @RestController
-@RequestMapping(path = "/api/customers")
+@RequestMapping(path = "/customers")
 @Timed
 public class CustomerMsRestController {
 
