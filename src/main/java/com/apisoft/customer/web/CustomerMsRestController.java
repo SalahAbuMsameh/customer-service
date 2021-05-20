@@ -1,17 +1,16 @@
 package com.apisoft.customer.web;
 
+import com.apisoft.customer.dao.entity.Customer;
 import com.apisoft.customer.dto.CustomerResponse;
 import com.apisoft.customer.exception.BadRequestException;
-import com.apisoft.customer.exception.Errors;
-import io.micrometer.core.annotation.Timed;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import com.apisoft.customer.dao.entity.Customer;
 import com.apisoft.customer.exception.CustomerMsException;
+import com.apisoft.customer.exception.Errors;
 import com.apisoft.customer.service.CustomerMsService;
 import com.apisoft.customer.web.api.ApiResponse;
 import com.apisoft.customer.web.api.ApiResponseBuilder;
+import io.micrometer.core.annotation.Timed;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

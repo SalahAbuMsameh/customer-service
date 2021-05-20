@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -22,7 +23,7 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "CUSTOMERS")
-public class Customer {
+public class Customer implements Serializable {
 
     private Long customerId;
     private String name;

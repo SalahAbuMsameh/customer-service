@@ -1,9 +1,12 @@
 package com.apisoft.customer.service;
 
-import com.apisoft.customer.exception.BadRequestException;
 import com.apisoft.customer.dao.CustomerDao;
 import com.apisoft.customer.dao.entity.Customer;
+import com.apisoft.customer.exception.BadRequestException;
 import com.apisoft.customer.exception.Errors;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +23,9 @@ import java.util.List;
 @Transactional
 public class CustomerMsService {
 
+    private static final Log LOGGER = LogFactory.getLog(CustomerMsService.class);
+    private static final String CUSTOMERS_CACHE = "customers";
+
     private CustomerDao customerDao;
 
     /**
@@ -35,7 +41,9 @@ public class CustomerMsService {
      *
      * @return customers list
      */
+    @Cacheable(cacheNames = CUSTOMERS_CACHE)
     public List<Customer> getCustomers() {
+        LOGGER.info("Getting customersssss from DB");
         return this.customerDao.findAll();
     }
 
@@ -46,8 +54,10 @@ public class CustomerMsService {
      * @return customer info
      * @throws BadRequestException when no customer found for the given id
      */
+    @Cacheable(cacheNames = CUSTOMERS_CACHE, key = "#customerId")
     public Customer getCustomer(final Long customerId) throws BadRequestException {
-        
+
+        LOGGER.info("Getting customer from DB");
         return this.customerDao.findById(customerId)
                 .orElseThrow(() -> new BadRequestException(Errors.NO_CUSTOMER_FOUND, customerId));
     }
