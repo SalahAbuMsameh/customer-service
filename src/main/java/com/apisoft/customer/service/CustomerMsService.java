@@ -6,6 +6,8 @@ import com.apisoft.customer.exception.BadRequestException;
 import com.apisoft.customer.exception.Errors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -68,8 +70,9 @@ public class CustomerMsService {
      * @param customer customer info object
      * @return added customer
      */
+    @CachePut(cacheNames = CUSTOMERS_CACHE, key = "#customerId")
     public Customer addCustomer(final Customer customer) {
-        
+
         customer.setCreatedDate(LocalDate.now());
         return this.customerDao.save(customer);
     }
@@ -81,6 +84,7 @@ public class CustomerMsService {
      * @return updated customer
      * @throws BadRequestException when no customer found for the given id
      */
+    @CachePut(cacheNames = CUSTOMERS_CACHE, key = "#customerId")
     public Customer updateCustomer(final Customer customer) throws  BadRequestException {
         
         Customer originalCustomer = getCustomer(customer.getCustomerId());
@@ -108,6 +112,7 @@ public class CustomerMsService {
      * @return deleted customer
      * @throws BadRequestException when no customer found for the given id
      */
+    @CacheEvict(cacheNames = CUSTOMERS_CACHE, key = "#customerId")
     public Customer deleteCustomer(final Long customerId) throws BadRequestException {
     
         Customer customer = getCustomer(customerId);
