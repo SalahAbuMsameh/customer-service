@@ -6,6 +6,7 @@ import com.apisoft.customer.exception.BadRequestException;
 import com.apisoft.customer.exception.Errors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -29,13 +30,15 @@ public class CustomerMsService {
     private static final String CUSTOMERS_CACHE = "customers";
 
     private CustomerDao customerDao;
+    private CacheManager cacheManager;
 
     /**
      * constructor.
      * @param customerDao customer dao component
      */
-    public CustomerMsService(final CustomerDao customerDao) {
+    public CustomerMsService(final CustomerDao customerDao, final CacheManager cacheManager) {
         this.customerDao = customerDao;
+        this.cacheManager = cacheManager;
     }
 
     /**
@@ -43,9 +46,7 @@ public class CustomerMsService {
      *
      * @return customers list
      */
-    @Cacheable(cacheNames = CUSTOMERS_CACHE)
     public List<Customer> getCustomers() {
-        LOGGER.info("Getting customersssss from DB");
         return this.customerDao.findAll();
     }
 
@@ -70,7 +71,7 @@ public class CustomerMsService {
      * @param customer customer info object
      * @return added customer
      */
-    @CachePut(cacheNames = CUSTOMERS_CACHE, key = "#customerId")
+    @CachePut(cacheNames = CUSTOMERS_CACHE, key = "#customer.customerId")
     public Customer addCustomer(final Customer customer) {
 
         customer.setCreatedDate(LocalDate.now());
@@ -84,7 +85,7 @@ public class CustomerMsService {
      * @return updated customer
      * @throws BadRequestException when no customer found for the given id
      */
-    @CachePut(cacheNames = CUSTOMERS_CACHE, key = "#customerId")
+    @CachePut(cacheNames = CUSTOMERS_CACHE, key = "#customer.customerId")
     public Customer updateCustomer(final Customer customer) throws  BadRequestException {
         
         Customer originalCustomer = getCustomer(customer.getCustomerId());
